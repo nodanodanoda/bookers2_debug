@@ -1,7 +1,8 @@
 <h2>User info</h2>
 
 <%= form_for(@user) do |f| %>
-
+<br>
+<br>
 <!-- エラーメッセージ表示-->
 <% if @user.errors.any? %>
 	<h3><%= @user.errors.count %>error occurrence</h3><!--エラーメッセ-->
@@ -14,8 +15,8 @@
 <!-- エラーメッセージ表示-->
 
 <div class="field">
-	<%= f.label :title %>
-	<%= f.text_field :title, class: "name" %>
+	<%= f.label :name %>
+	<%= f.text_field :name, class: "name" %>
 </div>
 
 <div class="field">
