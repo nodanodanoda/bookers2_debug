@@ -3,15 +3,53 @@
 
 		<tr>
 			<th>name</th>
-			<th><%= user.name %></th>
+			<td><%= user.name %></td>
 		</tr>
 
 		<tr>
 			<th>introduction</th>
-			<th><%= user.introduction %></th>
+			<td><%= user.introduction %></td>
+		</tr>
+
+		<% user ||= current_user %>
+		<tr>
+			<th>follow</th>
+			<td>
+			  <a href="<%= following_user_path(user) %>">
+			     <strong id="following" class="stat">
+			      <%= user.followings.count %>
+			    </strong>
+			  </a>
+			</td>
+		</tr>
+
+		<tr>
+		  <th>follower</th>
+		  <td>
+			  <a href="<%= followers_user_path(user) %>">
+			     <strong id="followers" class="stat">
+			       <%= user.followers.count %>
+			     </strong>
+			  </a>
+		  </td>
 		</tr>
 </table>
-
+<% if current_user == user %>
 <div class="row">
 	<%= link_to '',edit_user_path(user), class: "col-xs-12 btn btn-default glyphicon glyphicon-wrench edit_user_#{user.id}" %>
 </div>
+<% else %>
+  <div id="follow_form">
+  <% if current_user.following?(user) %>
+    <%= form_for(current_user.following_relationships.find_by(following_id: @user.id), html: { method: :delete }) do |f| %>
+  <%= f.submit "フォロー解除", class: "btn btn-large follow-btn" %>
+<% end %>
+  <% else %>
+    <%= form_for(current_user.following_relationships.build(following_id: @user.id)) do |f| %>
+  <div><%= f.hidden_field :following_id %></div>
+  <%= f.submit "フォロー", class: "btn btn-large btn-primary follow-btn" %>
+<% end %>
+  <% end %>
+  </div>
+<% end %>
+

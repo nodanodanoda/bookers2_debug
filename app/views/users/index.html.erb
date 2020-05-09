@@ -28,6 +28,20 @@
 		<tr>
 			<td><%= attachment_image_tag(user, :profile_image, :fill, 50, 50, fallback: "no-image-mini.jpg") %></td>
 			<td><%= user.name%></td>
+			<td>
+				<% if current_user != user %>
+					<% if current_user.following?(user) %>
+					    <%= form_for(current_user.following_relationships.find_by(following_id: user.id), html: { method: :delete }) do |f| %>
+					  <%= f.submit "フォロー解除", class: "btn btn-large follow-btn" %>
+					<% end %>
+					  <% else %>
+					    <%= form_for(current_user.following_relationships.build(following_id: user.id)) do |f| %>
+					  <div><%= f.hidden_field :following_id %></div>
+					  <%= f.submit "フォロー", class: "btn btn-large btn-primary follow-btn" %>
+					  <% end %>
+					<% end %>
+				<% end %>
+			</td>
 			<td><%= link_to "Show", user, class: "user_#{user.id}" %></td>
 		</tr>
 		<% end %>
